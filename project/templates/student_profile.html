@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ student.name }} — Student Profile{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Home</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('students_list') }}">Students</a></li>
+<li class="breadcrumb-item active">{{ student.name }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card-panel text-center">
+      {% if student.photo_path and student.photo_path != 'N/A' %}
+        <img src="{{ url_for('static', filename=student.photo_path) }}" class="profile-photo mb-3">
+      {% else %}
+        <div class="profile-photo mb-3 d-flex align-items-center justify-content-center mx-auto bg-grad-indigo text-white fw-bold" style="font-size:2.2rem;">
+          {{ student.name[0]|upper }}
+        </div>
+      {% endif %}
+      <h4 class="fw-bold mb-0">{{ student.name }}</h4>
+      <p class="text-muted mb-2">Student ID #{{ student.id }}</p>
+      <span class="badge {{ 'badge-soft-indigo' if student.gender=='Male' else 'badge-soft-pink' if student.gender=='Female' else 'badge-soft-green' }} mb-3">{{ student.gender }}</span>
+
+      <div class="d-flex justify-content-center gap-2">
+        <a href="{{ url_for('edit_student_route', student_id=student.id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill me-1"></i> Edit</a>
+        <form action="{{ url_for('delete_student_route', student_id=student.id) }}" method="POST" class="confirm-delete" data-confirm-label="{{ student.name }}">
+          <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash-fill me-1"></i> Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="card-panel">
+      <div class="section-title"><i class="bi bi-person-lines-fill text-primary"></i> Personal Details</div>
+      <div class="row g-3">
+        <div class="col-md-6"><small class="text-muted d-block">Date of Birth</small><span class="fw-semibold">{{ student.dob }}</span></div>
+        <div class="col-md-6"><small class="text-muted d-block">Age</small><span class="fw-semibold">{{ student.age }} years</span></div>
+        <div class="col-md-6"><small class="text-muted d-block">Phone</small><span class="fw-semibold">{{ student.phone }}</span></div>
+        <div class="col-md-6"><small class="text-muted d-block">Email</small><span class="fw-semibold">{{ student.email }}</span></div>
+        <div class="col-12"><small class="text-muted d-block">Address</small><span class="fw-semibold">{{ student.address }}</span></div>
+      </div>
+    </div>
+
+    <div class="card-panel mt-3">
+      <div class="section-title"><i class="bi bi-mortarboard-fill text-primary"></i> Academic Details</div>
+      <div class="row g-3">
+        <div class="col-md-4"><small class="text-muted d-block">Department</small><span class="fw-semibold">{{ student.department }}</span></div>
+        <div class="col-md-4"><small class="text-muted d-block">Semester</small><span class="fw-semibold">Semester {{ student.semester }}</span></div>
+        <div class="col-md-4"><small class="text-muted d-block">Admission Date</small><span class="fw-semibold">{{ student.admission_date }}</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

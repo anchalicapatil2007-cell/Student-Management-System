@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Login — Student Management System{% endblock %}
+
+{% block auth_content %}
+<div class="glass-card">
+  <div class="text-center">
+    <div class="auth-logo"><i class="bi bi-mortarboard-fill"></i></div>
+    <h3 class="fw-bold mb-1">Student Management System</h3>
+    <p class="text-muted-light mb-4">College ERP &mdash; Admin Login</p>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+      <div class="toast align-items-center text-bg-{{ 'danger' if category == 'danger' else category }} border-0 show" role="alert">
+        <div class="d-flex">
+          <div class="toast-body">{{ message }}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      </div>
+      {% endfor %}
+    {% endwith %}
+  </div>
+
+  <form method="POST" action="{{ url_for('login') }}" class="no-spinner">
+    <div class="mb-3">
+      <label class="form-label">Username</label>
+      <div class="input-group">
+        <span class="input-group-text bg-transparent border-0 ps-0"><i class="bi bi-person-fill"></i></span>
+        <input type="text" name="username" class="form-control" placeholder="admin" required autofocus>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <div class="input-group">
+        <span class="input-group-text bg-transparent border-0 ps-0"><i class="bi bi-lock-fill"></i></span>
+        <input type="password" name="password" id="passwordField" class="form-control" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+        <button class="btn btn-sm text-white" type="button" onclick="const f=document.getElementById('passwordField'); f.type = f.type==='password'?'text':'password';">
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+        <label class="form-check-label" for="remember">Remember me</label>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-glass w-100 py-2">
+      <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+    </button>
+  </form>
+
+  <p class="text-center text-muted-light small mt-4 mb-0">
+    Default credentials: <code class="text-white">admin / admin123</code>
+  </p>
+</div>
+{% endblock %}

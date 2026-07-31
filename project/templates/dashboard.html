@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Student Management System{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Dashboard</li>
+{% endblock %}
+
+{% block content %}
+<div class="gradient-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+  <div>
+    <h3 class="fw-bold mb-1">Welcome back, {{ current_user }} 👋</h3>
+    <p class="mb-0 opacity-75">Here's what's happening with your students today.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('add_student_route') }}" class="btn btn-light fw-semibold"><i class="bi bi-person-plus-fill me-1"></i> Add Student</a>
+    <a href="{{ url_for('export_csv_route') }}" class="btn btn-outline-light fw-semibold"><i class="bi bi-download me-1"></i> Export</a>
+  </div>
+</div>
+
+<!-- Stat cards -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-icon bg-grad-indigo"><i class="bi bi-people-fill"></i></div>
+      <div><div class="stat-value">{{ total_students }}</div><div class="stat-label">Total Students</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-icon bg-grad-cyan"><i class="bi bi-gender-male"></i></div>
+      <div><div class="stat-value">{{ male_count }}</div><div class="stat-label">Male Students</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-icon bg-grad-pink"><i class="bi bi-gender-female"></i></div>
+      <div><div class="stat-value">{{ female_count }}</div><div class="stat-label">Female Students</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card">
+      <div class="stat-icon bg-grad-amber"><i class="bi bi-building"></i></div>
+      <div><div class="stat-value">{{ department_count }}</div><div class="stat-label">Departments</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-lg-4">
+    <div class="stat-card">
+      <div class="stat-icon bg-grad-green"><i class="bi bi-calendar-heart"></i></div>
+      <div><div class="stat-value">{{ avg_age }}</div><div class="stat-label">Average Age (years)</div></div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card-panel h-100 d-flex flex-row flex-wrap gap-2 align-items-center">
+      <span class="section-title mb-0 me-2"><i class="bi bi-lightning-charge-fill text-warning"></i> Quick Actions</span>
+      <a href="{{ url_for('add_student_route') }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-person-plus"></i> Add Student</a>
+      <a href="{{ url_for('students_list') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i> Search</a>
+      <a href="{{ url_for('reports') }}" class="btn btn-sm btn-outline-info"><i class="bi bi-graph-up"></i> Reports</a>
+      <a href="{{ url_for('export_csv_route') }}" class="btn btn-sm btn-outline-success"><i class="bi bi-file-earmark-spreadsheet"></i> Export CSV</a>
+      <a href="{{ url_for('settings') }}" class="btn btn-sm btn-outline-dark"><i class="bi bi-gear"></i> Settings</a>
+    </div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="row g-3 mb-4">
+  <div class="col-lg-5">
+    <div class="card-panel h-100">
+      <div class="section-title"><i class="bi bi-pie-chart-fill text-primary"></i> Students by Gender</div>
+      <canvas id="genderChart" height="220"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="card-panel h-100">
+      <div class="section-title"><i class="bi bi-bar-chart-fill text-primary"></i> Students by Department</div>
+      <canvas id="departmentChart" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-lg-5">
+    <div class="card-panel h-100">
+      <div class="section-title"><i class="bi bi-diagram-3-fill text-primary"></i> Students by Semester</div>
+      <canvas id="semesterChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card-panel h-100">
+      <div class="section-title d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-clock-history text-primary"></i> Recently Added Students</span>
+        <a href="{{ url_for('students_list') }}" class="small">View all</a>
+      </div>
+      {% if recent_students %}
+      <div class="table-responsive">
+        <table class="table table-modern align-middle mb-0">
+          <thead><tr><th>Name</th><th>Department</th><th>Semester</th><th>Admitted</th><th></th></tr></thead>
+          <tbody>
+            {% for s in recent_students %}
+            <tr>
+              <td class="d-flex align-items-center gap-2">
+                <span class="avatar-sm">{{ s.name[0]|upper }}</span> {{ s.name }}
+              </td>
+              <td>{{ s.department }}</td>
+              <td><span class="badge badge-soft-indigo">Sem {{ s.semester }}</span></td>
+              <td>{{ s.admission_date }}</td>
+              <td><a href="{{ url_for('student_profile', student_id=s.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted mb-0">No students yet — add your first student to get started.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script>
+const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+const textColor = isDark ? '#cbd5e1' : '#374151';
+Chart.defaults.color = textColor;
+Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+
+new Chart(document.getElementById('genderChart'), {
+  type: 'doughnut',
+  data: {
+    labels: {{ gender_labels|tojson }},
+    datasets: [{
+      data: {{ gender_data|tojson }},
+      backgroundColor: ['#4f46e5', '#db2777', '#06b6d4'],
+      borderWidth: 0
+    }]
+  },
+  options: { plugins: { legend: { position: 'bottom' } }, cutout: '65%' }
+});
+
+new Chart(document.getElementById('departmentChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ department_labels|tojson }},
+    datasets: [{
+      label: 'Students',
+      data: {{ department_data|tojson }},
+      backgroundColor: '#4f46e5',
+      borderRadius: 8,
+      maxBarThickness: 42
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: gridColor } }
+    }
+  }
+});
+
+new Chart(document.getElementById('semesterChart'), {
+  type: 'line',
+  data: {
+    labels: {{ semester_labels|tojson }},
+    datasets: [{
+      label: 'Students',
+      data: {{ semester_data|tojson }},
+      borderColor: '#06b6d4',
+      backgroundColor: 'rgba(6,182,212,0.15)',
+      fill: true,
+      tension: 0.35,
+      pointRadius: 4
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: gridColor } }
+    }
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+# ---- Virtual environments ----
+venv/
+env/
+ENV/
+.venv/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# ---- Flask ----
+instance/
+.webassets-cache
+*.log
+
+# ---- Environment / secrets ----
+.env
+.flaskenv
+
+# ---- Database (contains real student data — don't commit) ----
+students.db
+*.db-journal
+students_backup_*.db
+
+# ---- Generated exports ----
+students_export_*.csv
+
+# ---- Uploaded student photos (user-generated content) ----
+static/uploads/*
+!static/uploads/.gitkeep
+
+# ---- OS / editor cruft ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

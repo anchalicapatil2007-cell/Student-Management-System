@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Settings — Student Management System{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Home</a></li>
+<li class="breadcrumb-item active">Settings</li>
+{% endblock %}
+
+{% block content %}
+<h4 class="fw-bold mb-3"><i class="bi bi-gear-fill text-primary me-1"></i> Settings</h4>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card-panel mb-3">
+      <div class="section-title"><i class="bi bi-person-circle text-primary"></i> Admin Profile</div>
+      <p class="mb-1"><strong>Username:</strong> {{ current_user }}</p>
+      <p class="text-muted small mb-0">Password hashing: SHA-256 (see auth.py). For production use, consider bcrypt or Argon2.</p>
+    </div>
+
+    <div class="card-panel mb-3">
+      <div class="section-title"><i class="bi bi-key-fill text-primary"></i> Change Password</div>
+      <form method="POST" class="no-spinner">
+        <input type="hidden" name="form_type" value="change_password">
+        <div class="mb-3">
+          <label class="form-label">Current Password</label>
+          <input type="password" name="current_password" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">New Password</label>
+          <input type="password" name="new_password" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Confirm New Password</label>
+          <input type="password" name="confirm_password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle-fill me-1"></i> Update Password</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card-panel mb-3">
+      <div class="section-title"><i class="bi bi-moon-stars-fill text-primary"></i> Appearance</div>
+      <form method="POST">
+        <input type="hidden" name="form_type" value="toggle_dark_mode">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="darkModeSwitch"
+                 onchange="this.form.submit()" {{ 'checked' if dark_mode }}>
+          <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+        </div>
+      </form>
+    </div>
+
+    <div class="card-panel mb-3">
+      <div class="section-title"><i class="bi bi-hdd-fill text-primary"></i> System Information</div>
+      <table class="table table-borderless mb-0">
+        <tbody>
+          <tr><td class="text-muted">Database Engine</td><td>SQLite 3</td></tr>
+          <tr><td class="text-muted">Database Size</td><td>{{ db_size_kb }} KB</td></tr>
+          <tr><td class="text-muted">Total Students</td><td>{{ total_students }}</td></tr>
+          <tr><td class="text-muted">Web Framework</td><td>Flask</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-panel">
+      <div class="section-title"><i class="bi bi-shield-fill-check text-primary"></i> Database Backup</div>
+      <p class="text-muted small">Download a full copy of the live <code>students.db</code> file. Keep it somewhere safe.</p>
+      <a href="{{ url_for('backup_database') }}" class="btn btn-outline-primary"><i class="bi bi-download me-1"></i> Download Backup (.db)</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

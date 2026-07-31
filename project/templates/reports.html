@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Reports — Student Management System{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Home</a></li>
+<li class="breadcrumb-item active">Reports</li>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <h4 class="fw-bold mb-0"><i class="bi bi-bar-chart-fill text-primary me-1"></i> Reports & Statistics</h4>
+  <a href="{{ url_for('export_csv_route') }}" class="btn btn-success"><i class="bi bi-file-earmark-arrow-down-fill me-1"></i> Export CSV</a>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-icon bg-grad-indigo"><i class="bi bi-people-fill"></i></div>
+      <div><div class="stat-value">{{ total }}</div><div class="stat-label">Total Students</div></div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-icon bg-grad-green"><i class="bi bi-calendar-heart"></i></div>
+      <div><div class="stat-value">{{ avg_age }}</div><div class="stat-label">Average Age</div></div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-icon bg-grad-amber"><i class="bi bi-building"></i></div>
+      <div><div class="stat-value">{{ by_department|length }}</div><div class="stat-label">Departments</div></div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="stat-card"><div class="stat-icon bg-grad-cyan"><i class="bi bi-diagram-3-fill"></i></div>
+      <div><div class="stat-value">{{ by_semester|length }}</div><div class="stat-label">Active Semesters</div></div></div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-lg-6">
+    <div class="card-panel h-100">
+      <div class="section-title"><i class="bi bi-building text-primary"></i> Department Statistics</div>
+      <canvas id="deptChart" height="220"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card-panel h-100">
+      <div class="section-title"><i class="bi bi-gender-ambiguous text-primary"></i> Gender Statistics</div>
+      <canvas id="genderChart" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card-panel h-100">
+      <div class="section-title"><i class="bi bi-layers-fill text-primary"></i> Semester Statistics</div>
+      <table class="table table-modern mb-0">
+        <thead><tr><th>Semester</th><th>Count</th></tr></thead>
+        <tbody>
+          {% for sem, count in by_semester %}
+          <tr><td>Semester {{ sem }}</td><td>{{ count }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="card-panel h-100">
+      <div class="section-title"><i class="bi bi-clock-history text-primary"></i> Recent Admissions</div>
+      <div class="table-responsive">
+        <table class="table table-modern align-middle mb-0">
+          <thead><tr><th>Name</th><th>Department</th><th>Admission Date</th></tr></thead>
+          <tbody>
+            {% for s in recent_admissions %}
+            <tr>
+              <td><a href="{{ url_for('student_profile', student_id=s.id) }}" class="text-decoration-none text-reset fw-semibold">{{ s.name }}</a></td>
+              <td>{{ s.department }}</td>
+              <td>{{ s.admission_date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script>
+const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+Chart.defaults.color = isDark ? '#cbd5e1' : '#374151';
+
+new Chart(document.getElementById('deptChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ by_department|map(attribute=0)|list|tojson }},
+    datasets: [{ data: {{ by_department|map(attribute=1)|list|tojson }}, backgroundColor: '#4f46e5', borderRadius: 8 }]
+  },
+  options: { plugins: { legend: { display: false } }, indexAxis: 'y' }
+});
+
+new Chart(document.getElementById('genderChart'), {
+  type: 'pie',
+  data: {
+    labels: {{ by_gender|map(attribute=0)|list|tojson }},
+    datasets: [{ data: {{ by_gender|map(attribute=1)|list|tojson }}, backgroundColor: ['#4f46e5','#db2777','#06b6d4'] }]
+  },
+  options: { plugins: { legend: { position: 'bottom' } } }
+});
+</script>
+{% endblock %}

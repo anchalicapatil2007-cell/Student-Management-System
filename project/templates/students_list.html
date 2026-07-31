@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Students — Student Management System{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Home</a></li>
+<li class="breadcrumb-item active">Students</li>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <h4 class="fw-bold mb-0"><i class="bi bi-people-fill text-primary me-1"></i> Students <span class="text-muted fw-normal">({{ total_count }})</span></h4>
+  <a href="{{ url_for('add_student_route') }}" class="btn btn-primary"><i class="bi bi-person-plus-fill me-1"></i> Add Student</a>
+</div>
+
+<!-- Live search -->
+<div class="card-panel mb-3 position-relative">
+  <label class="form-label small text-muted mb-1">Live Search (name or email)</label>
+  <input type="text" id="liveSearchInput" class="form-control" placeholder="Start typing a name or email...">
+  <div id="liveSearchResults" class="list-group position-absolute w-100 shadow d-none" style="z-index: 50; left:0; top:100%;"></div>
+</div>
+
+<!-- Filters -->
+<div class="card-panel mb-3">
+  <form method="GET" action="{{ url_for('students_list') }}" class="row g-2 align-items-end no-spinner">
+    <div class="col-md-3">
+      <label class="form-label small text-muted mb-1">Search</label>
+      <input type="text" name="q" value="{{ search }}" class="form-control" placeholder="Search...">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small text-muted mb-1">Search By</label>
+      <select name="search_by" class="form-select">
+        <option value="name" {{ 'selected' if search_by == 'name' }}>Name</option>
+        <option value="id" {{ 'selected' if search_by == 'id' }}>Student ID</option>
+        <option value="email" {{ 'selected' if search_by == 'email' }}>Email</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small text-muted mb-1">Department</label>
+      <select name="department" class="form-select">
+        <option value="">All</option>
+        {% for d in departments %}
+        <option value="{{ d }}" {{ 'selected' if department == d }}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small text-muted mb-1">Semester</label>
+      <select name="semester" class="form-select">
+        <option value="">All</option>
+        {% for n in range(1, 9) %}
+        <option value="{{ n }}" {{ 'selected' if semester == n|string }}>Semester {{ n }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small text-muted mb-1">Gender</label>
+      <select name="gender" class="form-select">
+        <option value="">All</option>
+        <option value="Male" {{ 'selected' if gender == 'Male' }}>Male</option>
+        <option value="Female" {{ 'selected' if gender == 'Female' }}>Female</option>
+        <option value="Other" {{ 'selected' if gender == 'Other' }}>Other</option>
+      </select>
+    </div>
+    <div class="col-md-1 d-grid">
+      <button type="submit" class="btn btn-primary"><i class="bi bi-funnel-fill"></i></button>
+    </div>
+  </form>
+  {% if search or department or semester or gender %}
+  <div class="mt-2"><a href="{{ url_for('students_list') }}" class="small"><i class="bi bi-x-circle"></i> Clear all filters</a></div>
+  {% endif %}
+</div>
+
+<!-- Table -->
+<div class="card-panel">
+  {% if students %}
+  <div class="table-responsive">
+    <table class="table table-modern align-middle mb-0">
+      <thead>
+        <tr>
+          {% macro sort_link(col, label) %}
+            <a href="{{ url_for('students_list', q=search, department=department, semester=semester, gender=gender, search_by=search_by, sort_by=col, sort_dir='desc' if sort_by==col and sort_dir=='asc' else 'asc', page=page) }}" class="text-decoration-none text-reset">
+              {{ label }}
+              {% if sort_by == col %}<i class="bi bi-caret-{{ 'up' if sort_dir=='asc' else 'down' }}-fill small"></i>{% endif %}
+            </a>
+          {% endmacro %}
+          <th>{{ sort_link('id', 'ID') }}</th>
+          <th>{{ sort_link('name', 'Name') }}</th>
+          <th>{{ sort_link('age', 'Age') }}</th>
+          <th>Gender</th>
+          <th>{{ sort_link('department', 'Department') }}</th>
+          <th>{{ sort_link('semester', 'Semester') }}</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>#{{ s.id }}</td>
+          <td class="d-flex align-items-center gap-2">
+            {% if s.photo_path and s.photo_path != 'N/A' %}
+              <img src="{{ url_for('static', filename=s.photo_path) }}" class="avatar-sm">
+            {% else %}
+              <span class="avatar-sm">{{ s.name[0]|upper }}</span>
+            {% endif %}
+            <a href="{{ url_for('student_profile', student_id=s.id) }}" class="text-decoration-none fw-semibold text-reset">{{ s.name }}</a>
+          </td>
+          <td>{{ s.age }}</td>
+          <td><span class="badge {{ 'badge-soft-indigo' if s.gender=='Male' else 'badge-soft-pink' if s.gender=='Female' else 'badge-soft-green' }}">{{ s.gender }}</span></td>
+          <td>{{ s.department }}</td>
+          <td>Sem {{ s.semester }}</td>
+          <td>{{ s.phone }}</td>
+          <td>{{ s.email }}</td>
+          <td class="text-end">
+            <a href="{{ url_for('student_profile', student_id=s.id) }}" class="btn btn-sm btn-outline-secondary" title="View"><i class="bi bi-eye"></i></a>
+            <a href="{{ url_for('edit_student_route', student_id=s.id) }}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="bi bi-pencil"></i></a>
+            <form action="{{ url_for('delete_student_route', student_id=s.id) }}" method="POST" class="d-inline confirm-delete" data-confirm-label="{{ s.name }}">
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if total_pages > 1 %}
+  <nav class="mt-3">
+    <ul class="pagination justify-content-center mb-0">
+      <li class="page-item {{ 'disabled' if page == 1 }}">
+        <a class="page-link" href="{{ url_for('students_list', q=search, department=department, semester=semester, gender=gender, search_by=search_by, sort_by=sort_by, sort_dir=sort_dir, page=page-1) }}">Previous</a>
+      </li>
+      {% for p in range(1, total_pages + 1) %}
+      <li class="page-item {{ 'active' if p == page }}">
+        <a class="page-link" href="{{ url_for('students_list', q=search, department=department, semester=semester, gender=gender, search_by=search_by, sort_by=sort_by, sort_dir=sort_dir, page=p) }}">{{ p }}</a>
+      </li>
+      {% endfor %}
+      <li class="page-item {{ 'disabled' if page == total_pages }}">
+        <a class="page-link" href="{{ url_for('students_list', q=search, department=department, semester=semester, gender=gender, search_by=search_by, sort_by=sort_by, sort_dir=sort_dir, page=page+1) }}">Next</a>
+      </li>
+    </ul>
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="text-center py-5">
+    <i class="bi bi-inbox display-1 text-muted"></i>
+    <p class="text-muted mt-2">No students found matching your criteria.</p>
+    <a href="{{ url_for('add_student_route') }}" class="btn btn-primary"><i class="bi bi-person-plus-fill me-1"></i> Add a Student</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
