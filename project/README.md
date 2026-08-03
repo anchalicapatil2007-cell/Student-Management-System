@@ -21,53 +21,55 @@ It is designed as an academic mini-project to demonstrate **CRUD operations, aut
 
 ---
 
+
+
 # 📸 Screenshots
 
 ## 🔐 Login Page
 
-Secure administrator login with authentication.
+Secure administrator login with glassmorphism UI.
 
-![Login](screenshots/login.png)
+![Login Page](screenshots/Login%20page(1).png)
 
 ---
 
 ## 📊 Dashboard
 
-Overview of student statistics with interactive charts.
+Overview of student statistics, charts, and quick actions.
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/Dashboard(1).png)
 
 ---
 
 ## 👨‍🎓 Student List
 
-View, search, update and manage student records.
+Manage student records with search, filters, update, and delete options.
 
-![Student List](screenshots/student-list.png)
+![Student List](screenshots/Student%20List(1).png)
 
 ---
 
 ## ➕ Add Student
 
-Add new students with complete validation and photo upload.
+Add new students with validation and photo upload.
 
-![Add Student](screenshots/add-student.png)
+![Add Student](screenshots/Add%20Student%20form.png)
 
 ---
 
 ## 📈 Reports
 
-Generate student reports and analytics.
+View department, gender, and semester statistics with analytics.
 
-![Reports](screenshots/reports.png)
+![Reports](screenshots/Reports%20page(1).png)
 
 ---
 
 ## ⚙️ Settings
 
-Manage application settings and administrator account.
+Manage administrator profile, password, dark mode, and database backup.
 
-![Settings](screenshots/settings.png)
+![Settings](screenshots/settings(1).png)
 
 ---
 
