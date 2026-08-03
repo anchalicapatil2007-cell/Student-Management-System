@@ -1,113 +1,81 @@
 # 🎓 Student Management System
 
-A modern **Student Management System** built with **Python**, **Flask**, and **SQLite**. This project provides both a **Console Edition** and a **Web Edition**, sharing the same database and business logic to ensure modularity, maintainability, and code reusability.
+A modern **College ERP Student Management System** built using **Python, Flask, SQLite, Bootstrap 5, HTML, CSS, and JavaScript**.
 
-It is designed as an academic mini-project to demonstrate **CRUD operations, authentication, database management, dashboard analytics, input validation, and full-stack web development**.
+The project includes both a **Console Edition** and a **Web Edition**, sharing the same SQLite database.
 
 ---
 
 ## ✨ Features
 
-* 🔐 Secure Admin Login
-* 👨‍🎓 Student CRUD (Create, Read, Update, Delete)
-* 📊 Dashboard with Student Statistics
-* 🔍 Live Search & Filtering
-* 📁 Export Student Data to CSV
-* 📸 Student Photo Upload
-* 📈 Reports & Analytics
-* 🌙 Dark Mode Support
-* 📱 Fully Responsive Bootstrap 5 Interface
-* 🔒 Password Hashing using SHA-256
+### Web Edition
+- 🔐 Secure Admin Login
+- 📊 Dashboard with Statistics
+- 👨‍🎓 Student Management (CRUD)
+- 🔍 Live Search & Filters
+- 📈 Reports & Analytics
+- 📤 Export Student Data to CSV
+- ⚙️ Admin Settings
+- 🖼️ Student Photo Upload
+- 📱 Responsive Bootstrap UI
+
+### Console Edition
+- Add Student
+- View Students
+- Search Student
+- Update Student
+- Delete Student
+- Count Students
 
 ---
 
+# 🛠 Tech Stack
 
-
-## 📸 Screenshots
-
-### 🔐 Login Page
-![Login](screenshots/Login%20page.png)
-
-### 📊 Dashboard
-![Dashboard](screenshots/Dashboard.png)
-
-### 👨‍🎓 Student List
-![Student List](screenshots/Student%20List.png)
-
-### ➕ Add Student
-![Add Student](screenshots/Add%20Student%20form.png)
-
-### 📈 Reports
-![Reports](screenshots/Reports%20page.png)
-
-### ⚙️ Settings
-![Settings](screenshots/Settings.png)
-
-## 🛠️ Technologies Used
-
-### Frontend
-
-* HTML5
-* CSS3
-* Bootstrap 5
-* JavaScript
-
-### Backend
-
-* Python 3
-* Flask
-
-### Database
-
-* SQLite
-
-### Visualization
-
-* Chart.js
-
-### Development Tools
-
-* Visual Studio Code
-* Git
-* GitHub
+- Python
+- Flask
+- SQLite
+- SQLAlchemy
+- Bootstrap 5
+- HTML5
+- CSS3
+- JavaScript
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
 Student-Management-System/
 │
 ├── app.py
 ├── main.py
-├── auth.py
 ├── database.py
+├── auth.py
 ├── dashboard.py
 ├── add_student.py
+├── search_student.py
 ├── update_student.py
 ├── delete_student.py
-├── search_student.py
-├── view_student.py
 ├── export_data.py
-├── utils.py
-├── colors.py
-├── banner.py
 ├── requirements.txt
-├── README.md
-│
-├── templates/
+├── students.db
 │
 ├── static/
-│   ├── css/
-│   ├── js/
-│   └── uploads/
+├── templates/
+├── uploads/
 │
 └── screenshots/
+    ├── Login page.png
+    ├── Dashboard.png
+    ├── Student List.png
+    ├── Add Student form.png
+    ├── Reports page.png
+    └── settings.png
 ```
 
 ---
 
-## 🚀 Installation
+# 🚀 Installation
 
 Clone the repository
 
@@ -115,7 +83,7 @@ Clone the repository
 git clone https://github.com/anchalicapatil2007-cell/Student-Management-System.git
 ```
 
-Go to the project directory
+Open the project
 
 ```bash
 cd Student-Management-System
@@ -127,17 +95,13 @@ Install dependencies
 pip install -r requirements.txt
 ```
 
----
-
-## ▶️ Running the Project
-
-### Web Version
+Run the web application
 
 ```bash
 python app.py
 ```
 
-Open your browser and visit:
+Open your browser
 
 ```
 http://127.0.0.1:5000
@@ -145,93 +109,96 @@ http://127.0.0.1:5000
 
 ---
 
-### Console Version
+# 🔑 Default Login
 
-```bash
-python main.py
+Username
+
+```
+admin
+```
+
+Password
+
+```
+admin123
 ```
 
 ---
 
-## 🔑 Default Login Credentials
+# 📸 Screenshots
 
-| Username | Password |
-| -------- | -------- |
-| admin    | admin123 |
+## Login Page
 
-> **Note:** Change the default password after your first login for better security.
+![Login](screenshots/Login%20page.png)
 
 ---
 
-## 📋 Project Modules
+## Dashboard
 
-* 🔐 Authentication
-* 👨‍🎓 Student Management
-* 📊 Dashboard
-* 📈 Reports
-* 🔍 Search & Filter
-* 📁 CSV Export
-* ⚙️ Settings
-* 🔒 Password Management
+![Dashboard](screenshots/Dashboard.png)
 
 ---
 
-## 💡 Key Highlights
+## Student List
 
-* Modular Project Structure
-* Secure Authentication System
-* SQLite Database Integration
-* Input Validation
-* Parameterized SQL Queries
-* CSV Export Functionality
-* Responsive User Interface
-* Dashboard Analytics
-* File Upload Support
-* Clean & Maintainable Code
+![Student List](screenshots/Student%20List.png)
 
 ---
 
-## 🚀 Future Enhancements
+## Add Student Form
 
-* Email Notifications
-* PDF Report Generation
-* Excel Import & Export
-* Docker Support
-* REST API Integration
-* PostgreSQL/MySQL Support
-* Role-Based Access Control
-* Attendance Management
-* Student Result Management
-* Cloud Deployment
+![Add Student](screenshots/Add%20Student%20form.png)
 
 ---
 
-## 🤝 Contributing
+## Reports
 
-Contributions are welcome!
-
-1. Fork the repository.
-2. Create a new branch.
-3. Commit your changes.
-4. Push the branch.
-5. Open a Pull Request.
+![Reports](screenshots/Reports%20page.png)
 
 ---
 
-## 👩‍💻 Author
+## Settings
+
+![Settings](screenshots/settings.png)
+
+---
+
+# 📊 Modules
+
+- Authentication
+- Dashboard
+- Student Management
+- Search & Filter
+- Reports
+- Export CSV
+- Settings
+- Database Backup
+
+---
+
+# 💾 Database
+
+SQLite database
+
+```
+students.db
+```
+
+---
+
+# 📄 License
+
+This project is developed for educational purposes.
+
+---
+
+# 👩‍💻 Author
 
 **Anchalica Shital Patil**
 
-B.Tech – Artificial Intelligence & Data Science
+Second Year B.Tech (Artificial Intelligence & Data Science)
 
----
+Vishwakarma Institute of Technology (VIT), Pune
 
-## ⭐ Support
-
-If you found this project useful, please consider giving it a ⭐ on GitHub.
-
----
-
-## 📜 License
-
-This project is intended for educational and learning purposes.
+GitHub:
+https://github.com/anchalicapatil2007-cell
