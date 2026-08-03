@@ -23,47 +23,25 @@ It is designed as an academic mini-project to demonstrate **CRUD operations, aut
 
 
 
-# 📸 Screenshots
+## 📸 Screenshots
 
-## 🔐 Login Page
-Secure administrator login with a modern glassmorphism interface.
+### 🔐 Login Page
+![Login](screenshots/Login%20page.png)
 
-![Login](screenshots/login.png)
+### 📊 Dashboard
+![Dashboard](screenshots/Dashboard.png)
 
----
+### 👨‍🎓 Student List
+![Student List](screenshots/Student%20List.png)
 
-## 📊 Dashboard
-Overview of student statistics, charts, and quick actions.
+### ➕ Add Student
+![Add Student](screenshots/Add%20Student%20form.png)
 
-![Dashboard](screenshots/dashboard.png)
+### 📈 Reports
+![Reports](screenshots/Reports%20page.png)
 
----
-
-## 👨‍🎓 Student List
-View, search, update, and manage student records.
-
-![Student List](screenshots/student-list.png)
-
----
-
-## ➕ Add Student
-Add new students with complete validation and photo upload support.
-
-![Add Student](screenshots/add-student.png)
-
----
-
-## 📈 Reports
-View analytics and statistics based on student data.
-
-![Reports](screenshots/reports.png)
-
----
-
-## ⚙️ Settings
-Manage administrator profile, password, appearance, and database backup.
-
-![Settings](screenshots/settings.png)
+### ⚙️ Settings
+![Settings](screenshots/Settings.png)
 
 ## 🛠️ Technologies Used
 
